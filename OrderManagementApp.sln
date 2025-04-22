@@ -4,6 +4,8 @@ VisualStudioVersion = 17.3.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementApp", "OrderManagementApp\OrderManagementApp.csproj", "{6C49A890-9C9C-46B9-A3BD-AD679E9649EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementApp.Test", "OrderManagementApp.Test\OrderManagementApp.Test.csproj", "{64D8E84A-2016-4428-8EDD-2610F03765C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,8 +16,15 @@ Global
 		{6C49A890-9C9C-46B9-A3BD-AD679E9649EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C49A890-9C9C-46B9-A3BD-AD679E9649EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C49A890-9C9C-46B9-A3BD-AD679E9649EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64D8E84A-2016-4428-8EDD-2610F03765C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64D8E84A-2016-4428-8EDD-2610F03765C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64D8E84A-2016-4428-8EDD-2610F03765C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64D8E84A-2016-4428-8EDD-2610F03765C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B683431-97C8-4DEA-BEFC-B3292924323F}
 	EndGlobalSection
 EndGlobal

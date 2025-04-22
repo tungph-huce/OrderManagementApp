@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagementApp.Data;
 using OrderManagementApp.Models;
+using OrderManagementApp.Services;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -13,10 +14,11 @@ namespace OrderManagementApp.Controllers
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public UserController(ApplicationDbContext context)
+        private readonly AccountService _userService;
+        public UserController(ApplicationDbContext context, AccountService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         public IActionResult Index() => View(_context.Users.ToList());
@@ -26,17 +28,30 @@ namespace OrderManagementApp.Controllers
         [HttpPost]
         public IActionResult Create(User user)
         {
-            //user.Role = "User";
+            if (user == null || string.IsNullOrEmpty(user.PasswordHash))
+            {
+                return BadRequest(); // Trả về BadRequest nếu mật khẩu là null hoặc rỗng
+            }
+
+            // Cung cấp giá trị cho Role nếu không có
+            if (string.IsNullOrEmpty(user.Role))
+            {
+                user.Role = "User";  // Gán giá trị mặc định cho Role
+            }
+
             if (ModelState.IsValid)
             {
-                user.PasswordHash = HashPassword(user.PasswordHash);
-                
+                user.PasswordHash = _userService.HashPassword(user.PasswordHash);
                 _context.Users.Add(user);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                // Trả về "CreateUser" view nếu ModelState hợp lệ
+                return View("CreateUser", user);  // Đảm bảo trả về đúng ViewName
             }
-            return View(user);
+
+            // Trả về View với "CreateUser" nếu ModelState không hợp lệ
+            return View("CreateUser", user);  // Đảm bảo trả về đúng ViewName
         }
+
 
         public IActionResult Edit(int id)
         {
@@ -70,13 +85,13 @@ namespace OrderManagementApp.Controllers
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-        private string HashPassword(string password)
-        {
-            using var sha = System.Security.Cryptography.SHA256.Create();
-            var bytes = System.Text.Encoding.UTF8.GetBytes(password);
-            var hash = sha.ComputeHash(bytes);
-            return Convert.ToBase64String(hash);
-        }
+        //private string HashPassword(string password)
+        //{
+        //    using var sha = System.Security.Cryptography.SHA256.Create();
+        //    var bytes = System.Text.Encoding.UTF8.GetBytes(password);
+        //    var hash = sha.ComputeHash(bytes);
+        //    return Convert.ToBase64String(hash);
+        //}
 
     }
 }

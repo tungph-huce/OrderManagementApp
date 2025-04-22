@@ -11,37 +11,53 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Cryptography;
+using OrderManagementApp.Services;
+using OrderManagementApp.Models;
 
 [AllowAnonymous]
 public class AccountController : Controller
 {
     private readonly ApplicationDbContext _context;
-
-    public AccountController(ApplicationDbContext context)
+    private readonly AccountService _userService;
+    public AccountController(ApplicationDbContext context, AccountService userService)
     {
         _context = context;
+        _userService = userService;        
     }
 
     public IActionResult Login() => View();
+    [HttpPost]
 
     [HttpPost]
-    public async Task<IActionResult> Login(string username, string password)
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginModel loginModel)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Username == username);
-        if (user == null) return View();
+        // Kiểm tra xem loginModel có null hoặc các trường trống không
+        if (loginModel == null || string.IsNullOrEmpty(loginModel.Username) || string.IsNullOrEmpty(loginModel.Password))
+        {
+            return BadRequest();  // Trả về BadRequest nếu dữ liệu không hợp lệ
+        }
 
-        string hashed = HashPassword(password);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();  // Trả về BadRequest nếu ModelState không hợp lệ
+        }
+
+        var user = _context.Users.FirstOrDefault(u => u.Username == loginModel.Username);
+        if (user == null) return View();  // Trả về View khi không tìm thấy người dùng
+
+        string hashed = _userService.HashPassword(loginModel.Password);
         if (user.PasswordHash != hashed)
         {
             ModelState.AddModelError("", "Sai tên đăng nhập hoặc mật khẩu.");
-            return View();
+            return View();  // Trả về View khi mật khẩu không đúng
         }
 
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Username),
             new Claim("UserId", user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.Role) // 👈 Thêm dòng này
+            new Claim(ClaimTypes.Role, user.Role)
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -51,6 +67,7 @@ public class AccountController : Controller
 
         return RedirectToAction("Index", "Product");
     }
+
 
     public async Task<IActionResult> Logout()
     {
@@ -70,11 +87,11 @@ public class AccountController : Controller
     }
 
 
-    private string HashPassword(string password)
-    {
-        using var sha = SHA256.Create();
-        var bytes = Encoding.UTF8.GetBytes(password);
-        var hash = sha.ComputeHash(bytes);
-        return Convert.ToBase64String(hash);
-    }
+    //private string HashPassword(string password)
+    //{
+    //    using var sha = SHA256.Create();
+    //    var bytes = Encoding.UTF8.GetBytes(password);
+    //    var hash = sha.ComputeHash(bytes);
+    //    return Convert.ToBase64String(hash);
+    //}
 }

@@ -52,14 +52,22 @@ namespace OrderManagementApp.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create(Product product)
         {
-            if (ModelState.IsValid)
+            if (product == null || string.IsNullOrEmpty(product.Name) || product.Price <= 0)
             {
-                _context.Products.Add(product);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+                ModelState.AddModelError("", "Product is invalid.");
             }
-            return View(product);
+
+            if (!ModelState.IsValid)
+            {
+                return View(product);  // Trả về View nếu ModelState không hợp lệ
+            }
+
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
+
+
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
