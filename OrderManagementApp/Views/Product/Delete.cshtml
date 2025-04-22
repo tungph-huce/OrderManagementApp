@@ -1,0 +1,10 @@
+﻿@model OrderManagementApp.Models.Product
+
+<h3>Bạn có chắc muốn xoá sản phẩm: <strong>@Model.Name</strong>?</h3>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xác nhận xoá</button>
+    <a asp-action="Index" class="btn btn-secondary">Huỷ</a>
+</form>
+

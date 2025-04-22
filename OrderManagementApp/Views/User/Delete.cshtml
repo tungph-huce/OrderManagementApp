@@ -1,0 +1,7 @@
+@model OrderManagementApp.Models.User
+
+<h3>Bạn có chắc muốn xóa người dùng: @Model.Username?</h3>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+</form>

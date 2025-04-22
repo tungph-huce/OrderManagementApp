@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Truy cập bị từ chối";
+    Layout = "_Layout";
+}
+
+<div class="container text-center mt-5">
+    <div class="animated fadeIn">
+        <img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Access Denied" width="150" class="mb-4" />
+        <h1 class="display-4 text-danger">403 - Không được phép</h1>
+        <p class="lead">Xin lỗi, bạn không có quyền truy cập chức năng này.</p>
+
+        <p class="text-muted">Vui lòng liên hệ quản trị viên nếu bạn nghĩ đây là nhầm lẫn.</p>
+
+        <a class="btn btn-outline-primary mt-3" href="/">🏠 Về trang chủ</a>
+    </div>
+</div>
+
+<!-- Optional animation -->
+<style>
+    .animated {
+        animation-duration: 1s;
+        animation-fill-mode: both;
+    }
+
+    @@keyframes fadeIn {
+    from
+    {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+    }
+
+    .fadeIn {
+        animation-name: fadeIn;
+    }
+</style>

@@ -1,0 +1,28 @@
+@model IEnumerable<OrderManagementApp.Models.User>
+
+<h2>Danh sách người dùng</h2>
+<!-- Nút Thêm -->
+<a asp-action="Create" class="btn btn-primary mb-3">Thêm người dùng</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên đăng nhập</th>
+            <th>Vai trò</th> <!-- 👈 thêm cột này -->
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Username</td>
+                <td>@item.Role</td> <!-- 👈 hiển thị Role -->
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Xoá</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
